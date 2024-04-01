@@ -78,14 +78,14 @@ export const Search = () => {
   useOnClickOutside(wrapperRef, () => setIsInputFocused(false));
 
   return (
-    <div className="flex flex-col w-full items-center pt-20 max-w-lg mx-auto space-y-8">
+    <div className="flex flex-col w-full items-center py-20 max-w-lg mx-auto space-y-8">
       <h1 className="text-4xl">The Anvesana Search Demo</h1>
 
       <div className="flex w-full space-x-4">
         <span ref={wrapperRef} className="w-full relative">
           <input
             type="text"
-            className="border w-full text-lg p-2"
+            className="border w-full text-lg p-2 rounded-md"
             value={searchString}
             onChange={(e) => setSearchString(e.target.value)}
             onFocus={() => setIsInputFocused(true)}
@@ -104,11 +104,11 @@ export const Search = () => {
             </div>
           )}
           {relevantSuggestions.length > 0 && isInputFocused && (
-            <ul className="absolute w-full bg-white shadow-lg mt-4 py-4 rounded-lg border z-10">
+            <ul className="absolute w-full bg-white shadow-lg mt-4 py-2 rounded-lg border z-10">
               {relevantSuggestions.map((suggestion) => (
                 <li key={suggestion}>
                   <button
-                    className="w-full h-full text-left bg-white hover:bg-gray-100 p-4"
+                    className="w-full h-full text-left bg-white hover:bg-gray-100 px-4 py-2"
                     onClick={() => {
                       setIsInputFocused(false);
                       setSearchString(suggestion);
@@ -121,7 +121,10 @@ export const Search = () => {
             </ul>
           )}
         </span>
-        <button onClick={() => refetch()} className="border px-4 py-2">
+        <button
+          onClick={() => refetch()}
+          className="border px-4 py-2 bg-white hover:bg-muted/50 active:bg-muted transition-colors rounded-md"
+        >
           Search
         </button>
       </div>
