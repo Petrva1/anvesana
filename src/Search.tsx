@@ -1,14 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useRef, useState } from "react";
-import { useOnClickOutside } from "usehooks-ts";
+import { useState } from "react";
 import { Spinner } from "./components/Spinner";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "./components/Table/DataTable";
-import { SortableTableHeader } from "./components/SortableTableHeader";
+import { SortableTableHeader } from "./components/Table/SortableTableHeader";
+import { SearchInputWithSuggestions } from "./components/SearchInputWithSuggestions";
 
 const SUGGESTIONS = ["Rick", "Morty", "Smith"];
 
-export type Character = {
+type Character = {
   id: number;
   name: string;
   status: string;
@@ -23,7 +23,7 @@ export type Character = {
   created: string;
 };
 
-export const columns: ColumnDef<Character>[] = [
+const columns: ColumnDef<Character>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => (
@@ -51,11 +51,9 @@ export type CharactersResponse = {
 
 export const Search = () => {
   const [searchString, setSearchString] = useState<string>("");
-  const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
-  const wrapperRef = useRef(null);
   const { data, refetch, isLoading, isError } = useQuery<CharactersResponse>({
     enabled: false,
-    queryKey: ["posts"],
+    queryKey: ["characters"],
     queryFn: () =>
       fetch(
         `https://rickandmortyapi.com/api/character/${
@@ -64,62 +62,19 @@ export const Search = () => {
       ).then((res) => res.json()),
   });
 
-  const relevantSuggestions = useMemo(
-    () =>
-      SUGGESTIONS.filter((suggestionFromList) => {
-        const suggestion = suggestionFromList.toLowerCase();
-        const string = searchString.toLowerCase();
-
-        return suggestion.includes(string);
-      }),
-    [searchString]
-  );
-
-  useOnClickOutside(wrapperRef, () => setIsInputFocused(false));
+  const handleInputChange = (text: string) => setSearchString(text);
 
   return (
     <div className="flex flex-col w-full items-center py-20 max-w-lg mx-auto space-y-8">
       <h1 className="text-4xl">The Anvesana Search Demo</h1>
 
       <div className="flex w-full space-x-4">
-        <span ref={wrapperRef} className="w-full relative">
-          <input
-            type="text"
-            className="border w-full text-lg p-2 rounded-md"
-            value={searchString}
-            onChange={(e) => setSearchString(e.target.value)}
-            onFocus={() => setIsInputFocused(true)}
-            onKeyDown={(e) => {
-              if (e.key === "Escape") {
-                setIsInputFocused(false);
-              }
-            }}
-          />
-          {searchString.length > 0 && (
-            <div className="flex justify-center items-center absolute right-0 pr-3 top-0 h-full">
-              <button className="p-1" onClick={() => setSearchString("")}>
-                ✕<span className="sr-only">Clear field</span>
-              </button>
-            </div>
-          )}
-          {relevantSuggestions.length > 0 && isInputFocused && (
-            <ul className="absolute w-full bg-white shadow-lg mt-4 py-2 rounded-lg border z-10">
-              {relevantSuggestions.map((suggestion) => (
-                <li key={suggestion}>
-                  <button
-                    className="w-full h-full text-left bg-white hover:bg-gray-100 px-4 py-2"
-                    onClick={() => {
-                      setIsInputFocused(false);
-                      setSearchString(suggestion);
-                    }}
-                  >
-                    {suggestion}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </span>
+        <SearchInputWithSuggestions
+          value={searchString}
+          onChange={handleInputChange}
+          suggestions={SUGGESTIONS}
+        />
+
         <button
           onClick={() => refetch()}
           className="border px-4 py-2 bg-white hover:bg-muted/50 active:bg-muted transition-colors rounded-md"
@@ -134,13 +89,6 @@ export const Search = () => {
         <Spinner />
       ) : (
         !!data && (
-          // <ul className="divide-y">
-          //   {data.results.map((char) => (
-          //     <div className="px-4 py-2" key={char.id}>
-          //       {char.name}
-          //     </div>
-          //   ))}
-          // </ul>
           <DataTable columns={columns} data={data.results} className="w-full" />
         )
       )}

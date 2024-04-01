@@ -23,3 +23,7 @@ There's a bunch of Character properties typed as `any`. Although this is a very 
 
 The Rick and Morty API has its own React client library, which you can use to make fetching its data even more comfortable. But I've opted to not to use it, as I wanted to treat the API as a generic one, so that's why I'm using tanstack's `react-query`, which is probably one of the most widespread ways to handle API requests. It handles the state of the request, allowing the developer to easily treat loading/error states, refetch the query, and more.
 
+When setting up data fetching logic for a bigger project with a proper Open API documentation, I'd setup Orval to automatically generate hooks and requests for me, so there's the minimised risk of human error, and that I don't have to create a separate fetch logic for every query fired.
+
+# Verdict
+I'll happily answer any of your questions on the following interview. It's quite possible that I forgot to write about everything I had on my mind when coding this demo, but I'll be happy to discuss about whatever that could be improved, and how to theoretically make the demo better, if it was an end product.
