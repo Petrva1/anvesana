@@ -1,4 +1,4 @@
-import { cn } from "../helpers/cn";
+import { cn } from "../utils";
 
 type SpinnerProps = {
   className?: string;

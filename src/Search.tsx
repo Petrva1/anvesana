@@ -2,6 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo, useRef, useState } from "react";
 import { useOnClickOutside } from "usehooks-ts";
 import { Spinner } from "./components/Spinner";
+import { ColumnDef } from "@tanstack/react-table";
+import { DataTable } from "./components/DataTable";
+import { SortableTableHeader } from "./components/SortableTableHeader";
 
 const SUGGESTIONS = ["Rick", "Morty", "Smith"];
 
@@ -19,6 +22,27 @@ export type Character = {
   url: string;
   created: string;
 };
+
+export const columns: ColumnDef<Character>[] = [
+  {
+    accessorKey: "name",
+    header: ({ column }) => (
+      <SortableTableHeader column={column} title="Name" />
+    ),
+  },
+  {
+    accessorKey: "status",
+    header: ({ column }) => (
+      <SortableTableHeader column={column} title="Status" />
+    ),
+  },
+  {
+    accessorKey: "species",
+    header: ({ column }) => (
+      <SortableTableHeader column={column} title="Species" />
+    ),
+  },
+];
 
 export type CharactersResponse = {
   info: any;
@@ -108,13 +132,14 @@ export const Search = () => {
         <Spinner />
       ) : (
         !!data && (
-          <ul className="divide-y">
-            {data.results.map((char) => (
-              <div className="px-4 py-2" key={char.id}>
-                {char.name}
-              </div>
-            ))}
-          </ul>
+          // <ul className="divide-y">
+          //   {data.results.map((char) => (
+          //     <div className="px-4 py-2" key={char.id}>
+          //       {char.name}
+          //     </div>
+          //   ))}
+          // </ul>
+          <DataTable columns={columns} data={data.results} className="w-full" />
         )
       )}
     </div>
