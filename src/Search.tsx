@@ -39,12 +39,23 @@ export const Search = () => {
   return (
     <div className="flex flex-col w-full items-center pt-20 max-w-lg mx-auto space-y-8">
       <h1 className="text-4xl">The Anvesana Search Demo</h1>
-      <input
-        type="text"
-        className="border w-full text-lg p-2"
-        value={searchString}
-        onChange={(e) => setSearchString(e.target.value)}
-      />
+
+      <span className="w-full relative">
+        <input
+          type="text"
+          className="border w-full text-lg p-2"
+          value={searchString}
+          onChange={(e) => setSearchString(e.target.value)}
+        />
+        {searchString.length > 0 && (
+          <div className="flex justify-center items-center absolute right-0 pr-3 top-0 h-full">
+            <button className="p-1" onClick={() => setSearchString("")}>
+              ✕
+            </button>
+          </div>
+        )}
+      </span>
+
       <button onClick={() => refetch()} className="border px-4 py-2">
         Search
       </button>
