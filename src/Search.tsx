@@ -104,7 +104,7 @@ export const Search = () => {
             </div>
           )}
           {relevantSuggestions.length > 0 && isInputFocused && (
-            <ul className="absolute w-full bg-white shadow-lg mt-4 py-4 rounded-lg border">
+            <ul className="absolute w-full bg-white shadow-lg mt-4 py-4 rounded-lg border z-10">
               {relevantSuggestions.map((suggestion) => (
                 <li key={suggestion}>
                   <button
