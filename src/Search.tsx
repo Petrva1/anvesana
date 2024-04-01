@@ -3,7 +3,7 @@ import { useMemo, useRef, useState } from "react";
 import { useOnClickOutside } from "usehooks-ts";
 import { Spinner } from "./components/Spinner";
 import { ColumnDef } from "@tanstack/react-table";
-import { DataTable } from "./components/DataTable";
+import { DataTable } from "./components/Table/DataTable";
 import { SortableTableHeader } from "./components/SortableTableHeader";
 
 const SUGGESTIONS = ["Rick", "Morty", "Smith"];
@@ -90,7 +90,6 @@ export const Search = () => {
             onChange={(e) => setSearchString(e.target.value)}
             onFocus={() => setIsInputFocused(true)}
             onKeyDown={(e) => {
-              console.log(e.key);
               if (e.key === "Escape") {
                 setIsInputFocused(false);
               }
